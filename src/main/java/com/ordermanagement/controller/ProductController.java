@@ -1,5 +1,12 @@
 package com.ordermanagement.controller;
 
+import com.ordermanagement.dto.ProductRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import com.ordermanagement.entity.Product;
 import com.ordermanagement.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,5 +34,11 @@ public class ProductController {
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product createProduct(@Valid @RequestBody ProductRequest request) {
+        return productService.createProduct(request);
     }
 }

@@ -1,5 +1,5 @@
 package com.ordermanagement.service;
-
+import com.ordermanagement.dto.ProductRequest;
 import com.ordermanagement.entity.Product;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +36,25 @@ public class ProductService {
                  .findFirst()
                  .orElse(null);       
     }
+
+    public Product createProduct(ProductRequest request) {
+
+    Long nextId = products.stream()
+            .mapToLong(Product::getId)
+            .max()
+            .orElse(0L) + 1;
+
+    Product product = new Product(
+            nextId,
+            request.getSku(),
+            request.getName(),
+            request.getDescription(),
+            request.getPrice(),
+            request.getQuantity()
+    );
+
+    products.add(product);
+
+    return product;
+}
 }
