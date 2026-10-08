@@ -1,61 +1,40 @@
 package com.ordermanagement.service;
+
 import com.ordermanagement.dto.ProductRequest;
 import com.ordermanagement.entity.Product;
-import org.springframework.stereotype.Service;
 import com.ordermanagement.exception.ProductNotFoundException;
+import com.ordermanagement.repository.ProductRepository;
+import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-
 public class ProductService {
-    
-    private final List<Product> products = new ArrayList<>();
 
-    public ProductService(){
-        products.add(
-            new Product(
-                1L,
-                "KB-001",
-                "Mechinical Keyboard",
-                "Mechinical Keyboard with RGB lighting",
-                new BigDecimal("2499.00"),
-                10
-            )
-        );
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public List<Product> getAllProducts(){
-        return products;
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     public Product getProductById(Long id) {
-    return products.stream()
-            .filter(product -> product.getId().equals(id))
-            .findFirst()
-            .orElseThrow(() -> new ProductNotFoundException(id));
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(ProductRequest request) {
+        Product product = new Product();
 
-    Long nextId = products.stream()
-            .mapToLong(Product::getId)
-            .max()
-            .orElse(0L) + 1;
+        product.setSku(request.getSku());
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setQuantity(request.getQuantity());
 
-    Product product = new Product(
-            nextId,
-            request.getSku(),
-            request.getName(),
-            request.getDescription(),
-            request.getPrice(),
-            request.getQuantity()
-    );
-
-    products.add(product);
-
-    return product;
-}
+        return productRepository.save(product);
+    }
 }
