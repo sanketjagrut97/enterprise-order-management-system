@@ -2,6 +2,7 @@ package com.ordermanagement.service;
 import com.ordermanagement.dto.ProductRequest;
 import com.ordermanagement.entity.Product;
 import org.springframework.stereotype.Service;
+import com.ordermanagement.exception.ProductNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,11 +31,11 @@ public class ProductService {
         return products;
     }
 
-    public Product getProductById(Long id){
-        return products.stream()
-                 .filter(product -> product.getId().equals(id))
-                 .findFirst()
-                 .orElse(null);       
+    public Product getProductById(Long id) {
+    return products.stream()
+            .filter(product -> product.getId().equals(id))
+            .findFirst()
+            .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(ProductRequest request) {
