@@ -19,6 +19,10 @@ target/
 *.iml
 *.ipr
 
+# Java Virtual Machine crash logs
+hs_err_pid*.log
+replay_pid*.log
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

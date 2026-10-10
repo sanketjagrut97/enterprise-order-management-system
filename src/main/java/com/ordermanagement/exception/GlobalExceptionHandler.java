@@ -7,10 +7,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+     
+    @ExceptionHandler(DuplicateSkuException.class)
+    public ResponseEntity<Map<String, Object>> handleDuplicateSku(
+                DuplicateSkuException exception) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("message", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+     }
+        
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleProductNotFound(

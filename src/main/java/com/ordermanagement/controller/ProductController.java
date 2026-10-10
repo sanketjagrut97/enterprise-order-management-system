@@ -1,5 +1,9 @@
 package com.ordermanagement.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import com.ordermanagement.dto.ProductRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -40,5 +44,19 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@Valid @RequestBody ProductRequest request) {
         return productService.createProduct(request);
+    }
+
+    @PutMapping("/{id}")
+    public Product updateProduct(
+        @PathVariable Long id,
+        @Valid @RequestBody ProductRequest request) {
+
+    return productService.updateProduct(id, request);
+}
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }
